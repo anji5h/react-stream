@@ -1,9 +1,10 @@
-import React from 'react'
+import React from "react";
+import Approute from "../app.routing";
 
 export default function App() {
-    return (
-        <div>
-            hello
-        </div>
-    )
+  return (
+    <div className='ui container'>
+      <Approute></Approute>
+    </div>
+  );
 }
