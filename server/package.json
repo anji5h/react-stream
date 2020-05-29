@@ -1,0 +1,14 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "json-api-server",
+  "main": "index.js",
+  "author": "anjish",
+  "license": "MIT",
+  "scripts": {
+    "start": "json-server -p 9090 -w db.json"
+  },
+  "dependencies": {
+    "json-server": "^0.16.1"
+  }
+}
