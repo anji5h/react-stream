@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
-
+import {createStream} from './../../../action/index';
+import {connect} from 'react-redux';
 export class streamCreate extends Component {
+
+  // render input error
   renderError = ({ error, touched }, name) => {
     if (touched && error) {
       document.querySelector(`#${name}`).style.borderColor = "red";
@@ -12,6 +15,8 @@ export class streamCreate extends Component {
       return <p></p>;
     }
   };
+
+  //render input
   renderInput = ({ input, id, label, meta }) => {
     return (
       <div className="field">
@@ -21,9 +26,9 @@ export class streamCreate extends Component {
       </div>
     );
   };
-
+  //handle submit
   onSubmit = (value) => {
-    console.log(value);
+    this.props.createStream(value)
   };
 
   render() {
@@ -54,12 +59,17 @@ export class streamCreate extends Component {
     );
   }
 }
+
+//form validation
 const validateForm = (formValue) => {
   let error = {};
   if (!formValue.title) error.title = "Please Provide Title";
   if (!formValue.description) error.description = "Please provide Description";
   return error;
 };
-export default reduxForm({ form: "streamCreate", validate: validateForm })(
+
+const formWrapper=reduxForm({ form: "streamCreate", validate: validateForm })(
   streamCreate
 );
+
+export default connect(null,{createStream})(formWrapper)

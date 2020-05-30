@@ -4,30 +4,33 @@ import { connect } from "react-redux";
 
 class GoogleOAuth extends Component {
   componentDidMount() {
-    window.gapi.load("client:auth2", () => {
-      window.gapi.client
-        .init({
-          clientId: process.env.REACT_APP_CLIENT_ID,
-          scope: "email",
-        })
-        .then(() => {
-          this.auth = window.gapi.auth2.getAuthInstance();
-          this.onAuthChange(this.auth.isSignedIn.get());
-          this.auth.isSignedIn.listen(this.onAuthChange);
-        });
-    });
+    try {
+      window.gapi.load("client:auth2", () => {
+        window.gapi.client
+          .init({
+            clientId: process.env.REACT_APP_CLIENT_ID,
+            scope: "email",
+          })
+          .then(() => {
+            this.auth = window.gapi.auth2.getAuthInstance();
+            this.onAuthChange(this.auth.isSignedIn.get());
+            this.auth.isSignedIn.listen(this.onAuthChange);
+          });
+      });
+    } catch (error) {
+      this.renderAuthButton(null);
+    }
   }
 
   renderAuthButton = () => {
     if (this.props.isSignedIn === null) {
-      return <div className="ui active mini text loader"></div>;
-    } 
-    else if (this.props.isSignedIn === true)
+      return <button className="circular ui large loading button">--</button>;
+    } else if (this.props.isSignedIn === true)
       return (
         <button className="ui red button" onClick={() => this.auth.signOut()}>
           <i className="google icon"></i> SIGN OUT
         </button>
-      )
+      );
     else
       return (
         <button className="ui red button" onClick={() => this.auth.signIn()}>
@@ -36,7 +39,9 @@ class GoogleOAuth extends Component {
       );
   };
   onAuthChange = (isSignedIn) => {
-    isSignedIn ? this.props.signIn(this.auth.currentUser.get().getId()) : this.props.signOut();
+    isSignedIn
+      ? this.props.signIn(this.auth.currentUser.get().getId() || null)
+      : this.props.signOut();
   };
 
   render() {
