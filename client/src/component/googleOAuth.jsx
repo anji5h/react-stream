@@ -24,10 +24,10 @@ class GoogleOAuth extends Component {
 
   renderAuthButton = () => {
     if (this.props.isSignedIn === null) {
-      return <button className="circular ui large loading button">--</button>;
+      return <button className="circular ui large loading red button">--</button>;
     } else if (this.props.isSignedIn === true)
       return (
-        <button className="ui red button" onClick={() => this.auth.signOut()}>
+        <button className="ui red labeled icon  button" onClick={() => this.auth.signOut()}>
           <i className="google icon"></i> SIGN OUT
         </button>
       );

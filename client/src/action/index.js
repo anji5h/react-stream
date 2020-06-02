@@ -1,4 +1,5 @@
 import axios from "./../axios";
+import history from "./../history";
 
 export const signIn = (userid) => {
   return {
@@ -13,13 +14,14 @@ export const signOut = () => {
   };
 };
 
-export const createStream = (formData) => async (dispatch,getState) => {
-  const {userid} = getState().auth;
-  const response = await axios.post("/streams", {...formData,userid});
+export const createStream = (formData) => async (dispatch, getState) => {
+  const { userid } = getState().auth;
+  const response = await axios.post("/streams", { ...formData, userid, date: Date.now() });
   dispatch({
     type: "CREATE_STREAM",
     payload: response.data,
   });
+  history.push("/");
 };
 
 export const fetchStreams = () => async (dispatch) => {
@@ -31,25 +33,27 @@ export const fetchStreams = () => async (dispatch) => {
 };
 
 export const fetchStreamById = (id) => async (dispatch) => {
-  const response = await axios.get("/streams/"+id);
+  const response = await axios.get("/streams/" + id);
   dispatch({
     type: "FETCH_STREAM",
     payload: response.data,
   });
 };
 
-export const editStream = (formData,id) => async (dispatch) => {
-  const response = await axios.put("/streams/"+id,formData);
+export const editStream = (formData, id) => async (dispatch) => {
+  const response = await axios.patch("/streams/" + id, formData);
   dispatch({
     type: "EDIT_STREAM",
     payload: response.data,
   });
+  history.push("/");
 };
 
 export const deleteStream = (id) => async (dispatch) => {
-  await axios.delete("/streams/"+id);
+  await axios.delete("/streams/" + id);
   dispatch({
     type: "DELETE_STREAM",
     payload: id,
   });
+  history.push("/");
 };
